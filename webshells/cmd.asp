@@ -74,7 +74,7 @@ Class UPC
       T2.Type = 1 : T2.Mode =3 : T2.Open
       T1.Position = DStart
       T1.CopyTo T2,DIEnd-DStart
-      T2.Position = 0 : T2.Type = 2 : T2.Charset ="gb2312"
+      T2.Position = 0 : T2.Type = 2 : T2.Charset ="utf-8"
       TIn = T2.ReadText : T2.Close
       DStart = InStrB(DIEnd,TDa,TSt)
       FStart = InStr(22,TIn,"name=""",1)+6
@@ -95,7 +95,7 @@ Class UPC
         T2.Type =1 : T2.Mode =3 : T2.Open
         T1.Position = DIEnd : T1.CopyTo T2,DStart-DIEnd-3
         T2.Position = 0 : T2.Type = 2
-        T2.Charset ="gb2312"
+        T2.Charset ="utf-8"
         SFV = T2.ReadText
         T2.Close
         if D1.Exists(UpName) then
