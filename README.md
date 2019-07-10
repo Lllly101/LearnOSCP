@@ -34,7 +34,16 @@ dir /q
 
 
 
-##### 查找权限存在问题的的services
+##### Bash 创建特殊的文件
+
+```bash
+touch ./-filename.txt
+touch -- -filename.txt
+rm ./-filename.txt
+rm -- --filename.txt
+```
+
+##### 查找权限存在问题的的 services
 
 *[accesschk](https://web.archive.org/web/20111111130246/http://live.sysinternals.com/accesschk.exe)* (*Windows XP*) 可用于判断 *servcies* 的权限，总是先执行 `/acceptula`。因为第一次执行该程序会弹窗，所以带入参数来确认弹窗。
 
