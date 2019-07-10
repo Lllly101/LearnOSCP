@@ -2,6 +2,8 @@
 
 
 
+
+
 - [Windows Privilege Escalation Fundamentals](https://www.fuzzysecurity.com/tutorials/16.html)
 - [AccessChk v6.12](https://docs.microsoft.com/en-us/sysinternals/downloads/accesschk) 用于确认 *windows* 用户权限
 - [msfvenom-cheat-sheet](https://nitesculucian.github.io/2018/07/24/msfvenom-cheat-sheet/)
@@ -12,10 +14,42 @@
 
 #### Tips
 
+##### SMB 信息收集
+
+Server Message Block 协议对应的操作系统信息如下
+
+- **SMB1** – Windows 2000, XP and Windows 2003
+- **SMB2** – Windows Vista SP1 and Windows 2008
+- **SMB2.1** – Windows 7 and Windows 2008 R2
+- **SMB3** – Windows 8 and Windows 2012.
+
+识别 SMB NetBIOS 服务（通常监听于 139 和 445 端口）
+
+1. `nmap -v -p 139,445 -oG smb.txt x.x.x.1-254` 
+2. `nbtscan -r  x.x.x.0/24`
+
+3. enum4linux 该工具集成了 *smbclient*、*rpcclinet*、*net* 和 *nmblookup*
+
+漏洞识别
+
+```bash
+root@kali:~# ls -l /usr/share/nmap/scripts/smb*
+
+root@kali:~# nmap -v -p 139,445 --script=smb-xxx x.x.x.x
+```
+
+
+
+
+
+
+
 ##### 路径信息收集
 
 ```shell
 # gobuster dir -u http://X.X.X.X/ -w /mnt/hgfs/share/OSCP/SecLists/Discovery/Web-Content/common.txt   -s '200,204,301,302,307,403,500' -e  -t 50
+
+# wfuzz -c -z file,/usr/share/wfuzz/wordlist/general/big.txt --hc 404 http://10.11.1.22/FUZZ
 ```
 
 
