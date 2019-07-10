@@ -12,6 +12,12 @@
 
 #### Tips
 
+##### 路径信息收集
+
+```shell
+# gobuster dir -u http://X.X.X.X/ -w /mnt/hgfs/share/OSCP/SecLists/Discovery/Web-Content/common.txt   -s '200,204,301,302,307,403,500' -e  -t 50
+```
+
 
 
 #####  查看当前用户身份的方式
