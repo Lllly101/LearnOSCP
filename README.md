@@ -2,6 +2,17 @@
 
 
 
+*Nikto* 用于发现 *Web Server* 的默认配置、不安全的配置文件和程序。
+
+```BASH
+# nikto -h x.x.x.x  // Default 80
+# nikto -h x.x.x.x -p 443,80  // multiple ports
+# nikto -h https://url   // protocol, host
+# nmap -p80 192.168.0.0/24 -oG - | nikto -h -   // scan multiple hosts
+```
+
+
+
 
 
 - [Windows Privilege Escalation Fundamentals](https://www.fuzzysecurity.com/tutorials/16.html)
