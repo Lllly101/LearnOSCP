@@ -13,6 +13,21 @@
 
 
 
+##### LFI2RCE
+
+- 通过包含 *Web Server* 或者 *ssh* 的日志
+  - 用户有权限访问日志（大多数场景下是没有权限读取日志的）
+  - 找到日志所在路径
+    - *apache* */var/log/apache2/error.log*  */var/log/httpd-error.log*
+    - *ssh /var/log/auth.log*
+-  包含 *php://filter*  或 *php://input* 来实现
+-  通过 *phpinfo.php* 和 *lfi* 来实现
+
+
+
+1. [LFI2RCE](https://www.exploit-db.com/papers/12992)
+
+#### Privilege Escalation for Windows
 
 
 - [Windows Privilege Escalation Fundamentals](https://www.fuzzysecurity.com/tutorials/16.html)
@@ -123,9 +138,13 @@ C:\"Documents and Settings"\Administrator\Desktop\proof.txt
 
 1. 配置存在问题的 *services*
 2. [*Exploiting environment variables*](http://techblog.rosedu.org/exploiting-environment-variables.html)
+3. [restricted-linux-shell-escaping-techniques/](https://fireshellsecurity.team/restricted-linux-shell-escaping-techniques/) 
 
-3. [restricted-linux-shell-escaping-techniques/](https://fireshellsecurity.team/restricted-linux-shell-escaping-techniques/)
+##### 空闲时间
+
+[社工钓鱼](https://null-byte.wonderhowto.com/how-to/hide-virus-inside-fake-picture-0168183/)
 
 
 # ChangeLog
-- 20190701 init
+- 20190711 update
+- 20190710 init
