@@ -64,7 +64,7 @@ root@kali:~# ls -l /usr/share/nmap/scripts/smb*
 root@kali:~# nmap -v -p 139,445 --script=smb-xxx x.x.x.x
 ```
 
-[经典参考资料](https://0xdf.gitlab.io/2018/12/02/pwk-notes-smb-enumeration-checklist-update1.html)
+[SMB-enumeration经典参考资料](https://0xdf.gitlab.io/2018/12/02/pwk-notes-smb-enumeration-checklist-update1.html)
 
 
 
@@ -143,6 +143,8 @@ C:\"Documents and Settings"\Administrator\Desktop\proof.txt
 ##### 空闲时间
 
 [社工钓鱼](https://null-byte.wonderhowto.com/how-to/hide-virus-inside-fake-picture-0168183/)
+
+[图片木马](http://gv7.me/articles/2017/picture-trojan-horse-making-method/)
 
 
 # ChangeLog
