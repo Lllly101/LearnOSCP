@@ -6,6 +6,16 @@
 
 
 
+**Hack Bar**
+
+- *Remember turn off the automatic updates*
+
+- *Post request not work as excepted*
+
+
+
+
+
 *Nikto* 用于发现 *Web Server* 的默认配置、不安全的配置文件和程序。
 
 ```BASH
@@ -25,7 +35,7 @@
     - *apache* */var/log/apache2/error.log*  */var/log/httpd-error.log*
     - *ssh /var/log/auth.log*
 -  包含 *php://filter*  或 *php://input* 来实现
--  通过 *phpinfo.php* 和 *lfi* 来实现
+-  通过 *phpinfo.php* 和 *lfi* 来实现，[推荐资料](https://insomniasec.com/cdn-assets/LFI_With_PHPInfo_Assistance.pdf)
 
 
 
@@ -159,5 +169,6 @@ C:\"Documents and Settings"\Administrator\Desktop\proof.txt
 
 
 # ChangeLog
+- 20190713 add 
 - 20190711 update
 - 20190710 init
