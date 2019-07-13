@@ -128,7 +128,7 @@ BEGIN {
 
 #### Upgrading TTY Shell
 
-1. 升级成 *tty shell*
+1. 升级成 *tty*
 
 ```bash
 [www-data@targethosts]$ python -c 'import pty;pty.spawn("/bin/bash")'
@@ -185,4 +185,4 @@ root@kali# stty size
 
 ### ChangeLog
 
-- 191713 init
+- 1910713 init
