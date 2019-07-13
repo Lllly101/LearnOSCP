@@ -29,6 +29,8 @@
 
 ##### LFI2RCE
 
+原理：通过在服务器上写下代码，接着通过 *LFI* 利用该代码
+
 - 通过包含 *Web Server* 或者 *ssh* 的日志
   - 用户有权限访问日志（大多数场景下是没有权限读取日志的）
   - 找到日志所在路径
@@ -36,6 +38,14 @@
     - *ssh /var/log/auth.log*
 -  包含 *php://filter*  或 *php://input* 来实现
 -  通过 *phpinfo.php* 和 *lfi* 来实现，[推荐资料](https://insomniasec.com/cdn-assets/LFI_With_PHPInfo_Assistance.pdf)
+
+***tip***： `%00` 截断仅适用于 *php* 版本低于5.3
+
+
+
+场景如果是 *CMS* 的话，除了尝试寻找 *upload* 功能，切记观察其他功能，不要一条路走到底。
+
+
 
 
 
