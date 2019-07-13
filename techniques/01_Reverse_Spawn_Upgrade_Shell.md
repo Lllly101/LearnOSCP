@@ -169,7 +169,7 @@ root@kali# stty size
 												nc -lvp 449
 																		reset
 																		
-[www-data@targethosts]$ stty rows 24 columns 80
+[www-data@targethosts]$ stty rows 23 columns 80
 ```
 
 ***tips*** ： 如果出现 `'xterm-256color': unknown terminal type.`，则说明 *targethosts* 不支持该终端，可以改为 `xterm`。
