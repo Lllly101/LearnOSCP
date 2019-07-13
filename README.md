@@ -61,12 +61,19 @@ Server Message Block 协议对应的操作系统信息如下
 ```bash
 root@kali:~# ls -l /usr/share/nmap/scripts/smb*
 
-root@kali:~# nmap -v -p 139,445 --script=smb-xxx x.x.x.x
+root@kali:~# nmap -v -p 139,445 --script smb-xxx x.x.x.x # 同时加载多个 NSE 脚本
 ```
 
 [SMB-enumeration经典参考资料](https://0xdf.gitlab.io/2018/12/02/pwk-notes-smb-enumeration-checklist-update1.html)
 
 
+
+##### nmap 信息收集
+
+```BASH
+$ nmap -v -sV -sT --top-ports 10 --open x.x.x.x  # 快速扫描 top 10 端口
+
+```
 
 
 
