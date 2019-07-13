@@ -38,7 +38,7 @@
 
 ### Reverse Shell & Spawning TTY & Upgrade it
 
-[Reverse_Spawn_Upgrade_Shell](Reverse_Spawn_Upgrade_Shell)
+[Reverse_Spawn_Upgrade_Shell](./Reverse_Spawn_Upgrade_Shell)
 
 
 
