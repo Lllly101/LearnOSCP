@@ -1,5 +1,9 @@
 # Learn OSCP
 
+##### EXP
+
+1. [01_lfi_phpinfo_exp.py](exps/01_lfi_phpinfo_exp.py)  利用 *LFI* 和 *PHPINFO* 到 *getshell*，[资料来源](https://insomniasec.com/cdn-assets/LFI_With_PHPInfo_Assistance.pdf)
+
 
 
 *Nikto* 用于发现 *Web Server* 的默认配置、不安全的配置文件和程序。
