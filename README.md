@@ -74,11 +74,17 @@ hydra -l usernmae  -P pass.txt 10.11.1.31 mssql -V # cracked 1433 ports windows
 -  包含 *php://filter*  或 *php://input* 来实现
 -  通过 *phpinfo.php* 和 *lfi* 来实现，[推荐资料](https://insomniasec.com/cdn-assets/LFI_With_PHPInfo_Assistance.pdf)
 
-***tip***： `%00` 截断仅适用于 *php* 版本低于5.3
+***tip***： 
+
+- `%00` 截断仅适用于 *php* 版本低于5.3
+- `shell_exec` 本质是 *linux* 中的 *backtick operator* ，函数返回执行结果
+- `exec` 返回执行结果的最后一行
 
 
 
 场景如果是 *CMS* 的话，除了尝试寻找 *upload* 功能，切记观察其他功能，不要一条路走到底。
+
+### 
 
 
 
@@ -214,6 +220,7 @@ C:\"Documents and Settings"\Administrator\Desktop\proof.txt
 
 
 # ChangeLog
+- 20190714 tips
 - 20190713 add 
 - 20190711 update
 - 20190710 init
